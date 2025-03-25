@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - ""7071:80""
+    environment:
+      - AZURE_SEARCH_SERVICE_ENDPOINT=https://<your-search-service>.search.windows.net
+      - AZURE_SEARCH_INDEX_NAME=<your-index-name>
