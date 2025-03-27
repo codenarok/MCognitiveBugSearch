@@ -5,9 +5,13 @@
       "allowedRoles": ["authenticated"]
     },
     {
+      "route": "/api/Search",
+      "methods": ["GET"],
+      "rewrite": "/api/Search"
+    },
+    {
       "route": "/*",
-      "rewrite": "/index.html",
-      "statusCode": 200
+      "rewrite": "/index.html"
     }
   ],
   "navigationFallback": {
