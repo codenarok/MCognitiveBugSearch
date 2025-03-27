@@ -1,6 +1,6 @@
 
 services:
-  backend:
+  api:
     build:
       context: .
       dockerfile: ./Dockerfile

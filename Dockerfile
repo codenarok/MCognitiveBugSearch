@@ -2,17 +2,21 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY backend/*.csproj ./backend/
-RUN dotnet restore ./backend/my-functions-app.csproj
+# Copy the project file and restore
+COPY api/*.csproj ./api/
+RUN dotnet restore ./api/my-functions-app.csproj
 
-COPY backend/. ./backend/
-WORKDIR /src/backend
+# Copy the entire function app code
+COPY api/. ./api/
+WORKDIR /src/api
+
+# Build and publish the function app
 RUN dotnet publish -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4
 
-# ✅ Install Azure CLI
+# ✅ Install Azure CLI (optional for local Azure CLI auth inside container)
 RUN apt-get update && \
     apt-get install -y curl apt-transport-https lsb-release gnupg && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
@@ -22,9 +26,10 @@ RUN apt-get update && \
     apt-get install -y azure-cli && \
     rm -f microsoft.gpg
 
+# Set working directory for the function runtime
 WORKDIR /home/site/wwwroot
 
-# ✅ Copy published app into correct Azure Functions directory
+# ✅ Copy built app from publish step
 COPY --from=build /app/publish .
 
 # ✅ Environment settings

@@ -2,8 +2,8 @@
   "IsEncrypted": false,
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "AzureSearchServiceEndpoint": "https://titleintelligencecogsearch.search.windows.net",
-    "AzureIndexName": "bug-vector-index-20250305",
+    "AZURE_SEARCH_SERVICE_ENDPOINT": "https://titleintelligencecogsearch.search.windows.net",
+    "AZURE_SEARCH_INDEX_NAME": "bug-vector-index-20250305",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true"
   },
   "Host": {
