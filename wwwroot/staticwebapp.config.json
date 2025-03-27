@@ -14,7 +14,17 @@
     "exclude": ["/api/*"]
   },
   "auth": {
-    "rolesSource": "DEFAULT"
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/<YOUR_TENANT_ID>/v2.0",
+          "clientIdSettingName": "AZURE_CLIENT_ID"
+        },
+        "login": {
+          "rolesSource": "DEFAULT"
+        }
+      }
+    }
   },
   "platform": {
     "apiRuntime": "dotnet:6.0"
