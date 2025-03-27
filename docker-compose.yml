@@ -1,10 +1,31 @@
-version: '3.8'
+
 services:
   backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: ./Dockerfile
+    image: mcognitivebugsearch:latest
     ports:
-      - ""7071:80""
+      - "7071:80"
     environment:
-      - AZURE_SEARCH_SERVICE_ENDPOINT=https://<your-search-service>.search.windows.net
-      - AZURE_SEARCH_INDEX_NAME=<your-index-name>
+      - AZURE_SEARCH_SERVICE_ENDPOINT=https://titleintelligencecogsearch.search.windows.net
+      - AZURE_SEARCH_INDEX_NAME=bug-vector-index-20250305
+      - AzureWebJobsStorage=UseDevelopmentStorage=true
+      - FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
+      - AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+
+      # ✅ Official CORS env var for Functions host in container
+      - WEBSITE_CORS_ALLOWED_ORIGINS=http://localhost:8080
+    volumes:
+      - ~/.azure:/root/.azure:ro  # 👈 Read-only mount of your Azure CLI credentials
+
+
+
+
+
+  frontend:
+    image: nginx:alpine
+    volumes:
+      - ./wwwroot:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"

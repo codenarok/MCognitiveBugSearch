@@ -1,9 +1,13 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "AzureSearchServiceEndpoint": "https://titleintelligencecogsearch.search.windows.net",
-    "AzureIndexName": "bug-vector-index-20250305"
+    "AzureIndexName": "bug-vector-index-20250305",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+  },
+  "Host": {
+    "CORS": "http://localhost:8080",
+    "CORSCredentials": true
   }
 }

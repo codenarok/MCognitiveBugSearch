@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -10,6 +8,10 @@ using Azure.Search.Documents.Models;
 using System;
 using System.Net;
 using System.Web;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using System.Linq;
 
 public class Search
 {
@@ -20,16 +22,12 @@ public class Search
     {
         _logger = loggerFactory.CreateLogger<Search>();
 
-        // Load configuration from environment variables
         string serviceEndpoint = Environment.GetEnvironmentVariable("AZURE_SEARCH_SERVICE_ENDPOINT");
         string indexName = Environment.GetEnvironmentVariable("AZURE_SEARCH_INDEX_NAME");
-        string userAssignedClientId = Environment.GetEnvironmentVariable("AZURE_CLIENT_ID");
 
-        var credential = new DefaultAzureCredential(
-            new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = userAssignedClientId
-            });
+        // 🔐 Force Azure CLI Credential for local dev
+        var credential = new AzureCliCredential();
+        _logger.LogInformation($"🔐 Using credential: {credential.GetType().Name}");
 
         _searchClient = new SearchClient(new Uri(serviceEndpoint), indexName, credential);
     }
@@ -39,31 +37,34 @@ public class Search
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "search")] HttpRequestData req)
     {
         _logger.LogInformation("Processing a request to the search endpoint.");
-
-        // Retrieve the query string (e.g., ?query=bugs)
         var queryParams = HttpUtility.ParseQueryString(req.Url.Query);
         var searchQuery = queryParams["query"] ?? string.Empty;
 
+        var response = req.CreateResponse();
+
+        // ✅ Set CORS headers
+        response.Headers.Add("Access-Control-Allow-Origin", "*");
+        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+        response.Headers.Add("Access-Control-Allow-Methods", "GET");
+
         if (string.IsNullOrEmpty(searchQuery))
         {
-            var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-            await badRequest.WriteStringAsync("Query parameter is required.");
-            return badRequest;
+            response.StatusCode = HttpStatusCode.BadRequest;
+            await response.WriteStringAsync("Query parameter is required.");
+            return response;
         }
 
         try
         {
-            // Limit results to 3 by using SearchOptions with Size = 3
             var options = new SearchOptions { Size = 3 };
-
             var resultsResponse = await _searchClient.SearchAsync<SearchDocument>(searchQuery, options);
             var simplifiedResults = resultsResponse.Value.GetResults()
                 .Select(r => new
                 {
-                    BugID = r.Document.ContainsKey("BugID") ? r.Document["BugID"] : null,
-                    SubmissionID = r.Document.ContainsKey("SubmissionID") ? r.Document["SubmissionID"] : null,
-                    RequirementNoFull = r.Document.ContainsKey("RequirementNoFull") ? r.Document["RequirementNoFull"] : null,
-                    BugType = r.Document.ContainsKey("BugType") ? r.Document["BugType"] : null
+                    BugID = r.Document.TryGetValue("BugID", out var bugId) ? bugId : null,
+                    SubmissionID = r.Document.TryGetValue("SubmissionID", out var subId) ? subId : null,
+                    RequirementNoFull = r.Document.TryGetValue("RequirementNoFull", out var reqNo) ? reqNo : null,
+                    BugType = r.Document.TryGetValue("BugType", out var bugType) ? bugType : null
                 });
 
             var resultObject = new
@@ -72,17 +73,15 @@ public class Search
                 Results = simplifiedResults
             };
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(resultObject);
             return response;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Search operation failed.");
-
-            var errorResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
-            await errorResponse.WriteStringAsync("Search operation failed.");
-            return errorResponse;
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal Server Error");
+            return response;
         }
     }
 }

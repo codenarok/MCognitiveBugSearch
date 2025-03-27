@@ -1,0 +1,15 @@
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\bin\Release\net6.0\host.json
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\bin\Release\net6.0\local.settings.json
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\bin\Release\net6.0\my-functions-app.deps.json
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\bin\Release\net6.0\my-functions-app.dll
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\bin\Release\net6.0\my-functions-app.pdb
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.csproj.AssemblyReference.cache
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.AssemblyInfoInputs.cache
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.AssemblyInfo.cs
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.csproj.CoreCompileInputs.cache
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.sourcelink.json
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.dll
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\refint\my-functions-app.dll
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\my-functions-app.pdb
+C:\Users\t-matasert\source\repos\MCognitiveBugSearch\backend\obj\Release\net6.0\ref\my-functions-app.dll

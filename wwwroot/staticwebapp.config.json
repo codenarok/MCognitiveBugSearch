@@ -1,0 +1,31 @@
+{
+  "routes": [
+    {
+      "route": "/api/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/*",
+      "rewrite": "/index.html",
+      "statusCode": 200
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/api/*"]
+  },
+  "auth": {
+    "rolesSource": "provider"
+  },
+  "platform": {
+    "apiRuntime": "dotnet:6.0"
+  },
+  "mimeTypes": {
+    ".js": "application/javascript",
+    ".jsx": "application/javascript"
+  },
+  "globalHeaders": {
+    "Cache-Control": "no-store, must-revalidate, no-cache, max-age=0",
+    "X-Content-Type-Options": "nosniff"
+  }
+}
