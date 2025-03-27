@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     <OutputType>Exe</OutputType>
-    <RootNamespace>backend</RootNamespace>
+    <RootNamespace>api</RootNamespace>
     <SelfContained>false</SelfContained>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
